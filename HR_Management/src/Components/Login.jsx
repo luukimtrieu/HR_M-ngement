@@ -9,20 +9,28 @@ const Login = () =>{
         password: ''
     })
 
+    const [error, setError] = useState(null)
     const navigate = useNavigate()
     axios.defaults.withCredentials = true;
-
     const handleLogin = (event) => {
         event.preventDefault();
         axios.post('http://localhost:3000/auth/adminlogin', values)
         .then(result => {
-            navigate('/dashboard')
+            if(result.data.loginStatus) {
+                localStorage.setItem("valid", true)
+                navigate('/dashboard')
+            } else {
+                setError(result.data.Error)
+            }
         })
         .catch(err => console.log(err));
     }
     return(
         <div className="d-flex justify-content-center align-items-center vh-100 loginPage">
             <div className="p-3 rounded w-25 border loginForm">
+                <div className='text-warning'>
+                    {error && error}
+                </div>
                 <h2>Login</h2>
                 <form onSubmit={handleLogin}>
                     <div className="mb-3">
