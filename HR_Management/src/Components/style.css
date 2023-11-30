@@ -16,3 +16,7 @@
     background-color: rgba();
     color: white;
 }
+
+ul li :hover {
+    background-color: gray;
+}
