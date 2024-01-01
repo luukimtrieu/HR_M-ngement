@@ -2,7 +2,7 @@ import axios from 'axios'
 import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Box, Button, TextField } from "@mui/material";
-import { Formik } from "formik";
+import { Field, Form, Formik } from "formik";
 import * as yup from "yup";
 import Header from "../../components/Header";
 
@@ -12,12 +12,22 @@ const AddDepartment = () => {
 
     const handleFormSubmit = (values) => {
         console.log(values);
-      };
+    };
 
-    const handleSubmit = (e, values) => {
+    const handleSubmit = (values) => {
         console.log(values.name)
-        
+        axios.post('http://localhost:3000/auth/add_department', values.name)
+        .then(result => {
+            if(result.data.Status) {
+                navigate('/department')
+                //navigate(0)
+            } else {
+              alert(result.data.Error)
+            }
+        })
+        .catch(err => console.log(err));
     }
+
   return (
     <Box m="20px">
       <Header title="CREATE DEPARTMENT" subtitle="Add New Department" />
@@ -35,7 +45,7 @@ const AddDepartment = () => {
           handleChange,
           handleSubmit,
         }) => (
-          <form onSubmit={handleSubmit}>
+          <Form onSubmit={handleSubmit}>
             <Box
               display="grid"
               gap="30px"
@@ -62,7 +72,7 @@ const AddDepartment = () => {
                 Create New Department
               </Button>
             </Box>
-          </form>
+          </Form>
         )}
       </Formik>
     </Box>
